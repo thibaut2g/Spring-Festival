@@ -2,7 +2,7 @@
 
   <div class="pull-left">Liste des participants au Spring Festival</div>
   <div class="pull-right">
-    <a id="export" href="export_liste_participants.php" class="btn btn-primary btn-large" onlick="">Exporter</a>
+    <a id="export" href="https://payicam-lille.icam.fr/register_spring_festival/admin_config/admin_export_participants" class="btn btn-primary btn-large" onlick="">Exporter</a>
     <a href="ajout_guest" class="btn btn-primary btn-large">Ajouter un invité</a>
   </div>
 

@@ -73,7 +73,7 @@ public static $prixParPromo = array(
 				'prixguest' => array("soiree" => 15))
 	);
 
-    public static $paiement = array('espece'=>'En espèces','CB'=>'Carte bancaire','cheque'=>'Par Chèque','Pumpkin'=>'Avec Pumpkin','PayIcam'=>'Avec PayIcam');
+    public static $paiement = array('espece'=>'En espèces','CB'=>'Carte bancaire','cheque'=>'Par Chèque','Lydia'=>'Avec Lydia','PayIcam'=>'Avec PayIcam');
     public static $sexe = array('1'=>'Homme','2'=>'Femme');
     public static $formule = array('Soirée'=>'Soirée');
 
