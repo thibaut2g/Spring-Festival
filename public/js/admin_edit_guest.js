@@ -23,13 +23,13 @@
 
 		if ( inputName == checkboxName )
 			return true;
-		else if (inputName == "repas" && (checkboxName == "repas" || checkboxName.match(/invites\[([0-9]+)\]\[repas\]/)!= null))
+		else if (inputName == "repas" && (checkboxName == "repas" || checkboxName.match(/guests\[([0-9]+)\]\[repas\]/)!= null))
 			return true;
-		else if (inputName == "buffet" && (checkboxName == "buffet" || checkboxName.match(/invites\[([0-9]+)\]\[buffet\]/) != null))
+		else if (inputName == "buffet" && (checkboxName == "buffet" || checkboxName.match(/guests\[([0-9]+)\]\[buffet\]/) != null))
 			return true;
-		else if (inputName == "bracelet_id" && (checkboxName == "bracelet_id" || checkboxName.match(/invites\[([0-9]+)\]\[bracelet_id\]/) != null))
+		else if (inputName == "bracelet_id" && (checkboxName == "bracelet_id" || checkboxName.match(/guests\[([0-9]+)\]\[bracelet_id\]/) != null))
 			return true;
-		// else if (checkboxName.match(/^invites\[[0-9]+\]\[" + inputName + "\]/))
+		// else if (checkboxName.match(/^guests\[[0-9]+\]\[" + inputName + "\]/))
 		// 	return true;
 		else
 			return false;
@@ -162,7 +162,7 @@
 	 * Afficher ou cacher le formulaire pour un deuxième invité.
 	 */
 
-	var invites = $('.invite');
+	var guests = $('.invite');
 	var invite1 = $('#invite1');
 	var invite2 = $('#invite2');
 	var invite3 = $('#invite3');
@@ -175,8 +175,8 @@
 	// var invite10 = $('#invite10');
 	function checkPromoGuestFields () {
 		// var promoVal = promo.val();
-		// invites.each(function(index, elem) {
-		// 	valInputNom = $('input[name="invites['+index+'][nom]"]').val();
+		// guests.each(function(index, elem) {
+		// 	valInputNom = $('input[name="guests['+index+'][nom]"]').val();
 		// 	if (valInputNom == undefined || valInputNom == "") {
 		// 		$(elem).hide();
 		// 	};

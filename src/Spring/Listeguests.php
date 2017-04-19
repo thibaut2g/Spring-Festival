@@ -3,9 +3,9 @@
 namespace Spring;
 
 /**
-* Classe Listinvites, la liste des participants du Gala
+* Classe Listguests, la liste des participants du Gala
 */
-class ListeInvites{
+class Listeguests{
 
 	const perPages = 120;
 
@@ -13,11 +13,11 @@ class ListeInvites{
 	private $page;
 	private $perPages;
 	private $options;
-	private $globalCountinvites;
-	private $countinvites;
-	private $countSqlReturnedinvites;
+	private $globalCountguests;
+	private $countguests;
+	private $countSqlReturnedguests;
 	private $countPages;
-	private $invitesList;
+	private $guestsList;
 
 	/**
 	 * __construct construction de la classe
@@ -46,22 +46,22 @@ class ListeInvites{
 		$this->perPages = (isset($data['perPages']) && $data['perPages'] >= 0) ? $data['perPages'] : self::perPages;
 		$this->options  = !empty($data['options']) ? $data['options'] : array();
 
-		$this->globalCountinvites = Participant::getinvitesCount();
+		$this->globalCountguests = Participant::getguestsCount();
 		if ($this->perPages > 0)
-			$this->invitesList = $this->getinvitesList();
+			$this->guestsList = $this->getguestsList();
 		else{
-			$this->invitesList = array();
-			$this->countinvites = $this->globalCountinvites;
+			$this->guestsList = array();
+			$this->countguests = $this->globalCountguests;
 			$this->countPages  = 1;
 		}
-		$this->countSqlReturnedinvites = count($this->invitesList);
+		$this->countSqlReturnedguests = count($this->guestsList);
 	}
 
 	/**
-	 * getinvitesList création de la liste des participants en fonction des paramètres voulus
+	 * getguestsList création de la liste des participants en fonction des paramètres voulus
 	 * @return array le tableau des participants sélectionnés
 	 **/
-	private function getinvitesList(){
+	private function getguestsList(){
 		global $DB;
 		$where = '';$q = array();
 
@@ -89,12 +89,12 @@ class ListeInvites{
 			$where .= $whereOptions;
 
 	    // --------------------- Vérification sur le nombre de pages --------------------- //
-		$this->countinvites = current($DB->queryFirst('SELECT COUNT(id) FROM invites '.$where, $q));
-		$this->countPages  = ceil($this->countinvites/$this->perPages);
+		$this->countguests = current($DB->queryFirst('SELECT COUNT(id) FROM guests '.$where, $q));
+		$this->countPages  = ceil($this->countguests/$this->perPages);
 		if (empty($this->options)  || !empty($this->options['fields'])
-			|| isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectinvites'])
+			|| isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectguests'])
 			&& !( Participant::getPromosCount() > count($this->options['promo'])
-			&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectinvites'] == 1)){
+			&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectguests'] == 1)){
 			if ($this->page > $this->countPages || $this->page < 1){
 				$this->page = 1;
 			}
@@ -102,11 +102,11 @@ class ListeInvites{
 
 	    // --------------------- Sélection des invités dans la base --------------------- //
 	    $fields = (!empty($this->options['fields']))?((is_array($this->options['fields']))?implode(',', $this->options['fields']):$this->options['fields']):'*';
-		$sql = 'SELECT '.$fields.' FROM invites '.(($leftJoin != '')?$leftJoin:'').' '.$where;
+		$sql = 'SELECT '.$fields.' FROM guests '.(($leftJoin != '')?$leftJoin:'').' '.$where;
 		if (empty($this->options) || !empty($this->options['fields'])
-			|| (isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectinvites'])
+			|| (isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectguests'])
 					&& !( Participant::getPromosCount() > count($this->options['promo'])
-								&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectinvites'] == 1))
+								&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectguests'] == 1))
 		)
 			$sql .= ' ORDER BY bracelet_id ASC LIMIT '.(($this->page-1)*$this->perPages).','.$this->perPages;
 		$retour = $DB->query($sql, $q);
@@ -114,27 +114,27 @@ class ListeInvites{
 		// debug($sql,'$sql');
 
 		// On récupère les invités des icams des promos sélectionnées
-		if (!empty($retour) && isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectinvites'])
+		if (!empty($retour) && isset($this->options['selectAllPromos'],$this->options['promo'],$this->options['selectguests'])
 			&& Participant::getPromosCount() > count($this->options['promo'])
-			&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectinvites'] == 1 ){
+			&& $this->options['selectAllPromos'] == 0 && !empty($this->options['promo']) && $this->options['selectguests'] == 1 ){
 			$options = $this->options;
-			$options['selectinvites'] = 1;
+			$options['selectguests'] = 1;
 			$options['selectAllPromos'] = 0;
 			$options['promo'] = array();
 			$whereOptions = $this->getWhereForOptions($options);
 			$retour2 = array();
 			foreach ($retour as $guestIcam) {
 				$retour2[] = $guestIcam;
-				$sql = 'SELECT '.$fields.' FROM invites LEFT JOIN lien_icam_invite ihg ON ihg.guest_id = id '.(($leftJoin != '')?$leftJoin:'').' WHERE icam_id = :icam_id '.((!empty($whereOptions))?' AND '.$whereOptions:'');
-				$retourInvites = $DB->query($sql, array('icam_id'=>$guestIcam['id']));
-				if (!empty($retourInvites)) {
-					foreach ($retourInvites as $invite) {
+				$sql = 'SELECT '.$fields.' FROM guests LEFT JOIN icam_has_guest ihg ON ihg.guest_id = id '.(($leftJoin != '')?$leftJoin:'').' WHERE icam_id = :icam_id '.((!empty($whereOptions))?' AND '.$whereOptions:'');
+				$retourguests = $DB->query($sql, array('icam_id'=>$guestIcam['id']));
+				if (!empty($retourguests)) {
+					foreach ($retourguests as $invite) {
 						$retour2[] = $invite;
 					}
 				}
 			}
-			$this->countinvites = count($retour2);
-			$this->countPages  = ceil($this->countinvites/$this->perPages);
+			$this->countguests = count($retour2);
+			$this->countPages  = ceil($this->countguests/$this->perPages);
 			if ($this->page > $this->countPages || $this->page < 1){
 				$this->page = 1;
 			}
@@ -156,13 +156,13 @@ class ListeInvites{
 		if (!empty($this->options['monsieurx'])) {
 			$retour2 = array();
 			foreach ($retour as $guestIcam) {
-				$sql = 'SELECT '.$fields.' FROM invites LEFT JOIN lien_icam_invite ihg ON ihg.icam_id = id WHERE guest_id = :guest_id';
+				$sql = 'SELECT '.$fields.' FROM guests LEFT JOIN icam_has_guest ihg ON ihg.icam_id = id WHERE guest_id = :guest_id';
 				$retourIcam = $DB->queryFirst($sql, array('guest_id'=>$guestIcam['id']));
 				$retour2[] = $retourIcam;
 				$retour2[] = $guestIcam;
 			}
-			$this->countinvites = count($retour2);
-			$this->countPages  = ceil($this->countinvites/$this->perPages);
+			$this->countguests = count($retour2);
+			$this->countPages  = ceil($this->countguests/$this->perPages);
 			if ($this->page > $this->countPages || $this->page < 1){
 				$this->page = 1;
 			}
@@ -184,8 +184,8 @@ class ListeInvites{
 		foreach ($retour as $k => $guest) {
 			$fields = array('id','bracelet_id','prenom','nom','promo','is_icam','paiement','inscription','sexe');
 			if ($guest['is_icam']==1){
-				$retour[$k]['invites'] = Participant::getInvites($guest['id'],$fields);
-				$retour[$k]['count_invites'] = current($DB->queryFirst('SELECT COUNT(*) FROM lien_icam_invite WHERE icam_id = '.$guest['id']));	
+				$retour[$k]['guests'] = Participant::getguests($guest['id'],$fields);
+				$retour[$k]['count_guests'] = current($DB->queryFirst('SELECT COUNT(*) FROM icam_has_guest WHERE icam_id = '.$guest['id']));	
 			}
 	    	else
 	    		$retour[$k]['invitor'] = Participant::getInvitorStatic($guest['id'],$fields);
@@ -251,7 +251,7 @@ class ListeInvites{
 		if (empty($options)) {
 			$options = $this->options;
 		}
-		if (!empty($options) && isset($options['selectinvites'],$options['selectAllPromos'],$options['promo'],$options['formule'],$options['paiement'],$options['sexe'],$options['noBracelet'],$options['monsieurx'],$options['doublons'])) {
+		if (!empty($options) && isset($options['selectguests'],$options['selectAllPromos'],$options['promo'],$options['formule'],$options['paiement'],$options['sexe'],$options['noBracelet'],$options['monsieurx'],$options['doublons'])) {
 			$whereOptions = '';
 	    	if (!is_array($options)) {
                 $whereOptions.= '('.$options.')
@@ -265,9 +265,9 @@ class ListeInvites{
             	}
 
                 $cond = array();
-                if ($options['selectinvites'] == 0 && $options['selectAllPromos'] == 1)
+                if ($options['selectguests'] == 0 && $options['selectAllPromos'] == 1)
                 	$cond[] = 'promo != "" ';
-                else if ($options['selectinvites'] == 1 && $options['selectAllPromos'] == 0 && empty($options['promo']))
+                else if ($options['selectguests'] == 1 && $options['selectAllPromos'] == 0 && empty($options['promo']))
                 	$cond[] = 'promo = "" ';
                 else if ($options['selectAllPromos'] == 0 && !empty($options['promo']))
                 	$cond[] = '(promo IN('.implode(',', $options['promo']).') )';
@@ -289,7 +289,7 @@ class ListeInvites{
                 	$cond[] = '(nom = "monsieur" OR prenom = "monsieur" OR nom = "x" OR prenom = "x" )';
                 	$this->perPages = 3000;
                 }elseif (!empty($options['doublons']) && $options['doublons'] == 1) {
-                	$cond[] = 'bracelet_id IN( SELECT tmptable.bracelet_id FROM ( SELECT bracelet_id FROM invites WHERE bracelet_id != 0 GROUP BY bracelet_id HAVING COUNT(bracelet_id) >1 ) AS tmptable )';
+                	$cond[] = 'bracelet_id IN( SELECT tmptable.bracelet_id FROM ( SELECT bracelet_id FROM guests WHERE bracelet_id != 0 GROUP BY bracelet_id HAVING COUNT(bracelet_id) >1 ) AS tmptable )';
                 	$this->perPages = 3000;
                 }
                 if (!empty($cond)) {
@@ -308,11 +308,11 @@ class ListeInvites{
 	public function getGuestAsTr(){
 		ob_start();
 
-		if($this->countinvites){
-	        foreach ($this->invitesList as $guest) { ?>
+		if($this->countguests){
+	        foreach ($this->guestsList as $guest) { ?>
 				<tr class="<?php echo ($guest['is_icam']==1)?'':'warning' ?>">
 				  <td>
-				    <input id="guest_<?php echo $guest['id']; ?>" class="checkbox" type="checkbox" value="<?php echo $guest['id']; ?>" name="invites[]">
+				    <input id="guest_<?php echo $guest['id']; ?>" class="checkbox" type="checkbox" value="<?php echo $guest['id']; ?>" name="guests[]">
 				  </td>
 
 				  <td>
@@ -347,7 +347,7 @@ class ListeInvites{
 
 				  <td>
 				  	<?php 
-				    	if ($guest['is_icam']==1 && !empty($guest['count_invites'])) echo $guest['count_invites']
+				    	if ($guest['is_icam']==1 && !empty($guest['count_guests'])) echo $guest['count_guests']
 				  	?>&nbsp;
 				  </td>
 
@@ -373,9 +373,9 @@ class ListeInvites{
 				          <?php if(!empty($guest['paiement'])){ ?><i class="icon-shopping-cart"></i> Paiement : <?php echo $guest['paiement'].'<br>'; }?>
 				          <?php if(!empty($guest['price'])){ ?><i class="icon-shopping-cart"></i> Place : <?php echo $guest['price'].'€<br>'; }?>
 				          <?php 
-				          if (!empty($guest['invites']) && is_array($guest['invites'])) {
-				            echo '<strong>Invité'.(count($guest['invites'])==1?'':'s').' :</strong><br>';
-				            foreach ($guest['invites'] as $invite) {
+				          if (!empty($guest['guests']) && is_array($guest['guests'])) {
+				            echo '<strong>Invité'.(count($guest['guests'])==1?'':'s').' :</strong><br>';
+				            foreach ($guest['guests'] as $invite) {
 				              ?><i class="icon-<?php echo (isset($invite['sexe']) && $invite['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $invite['prenom'].' '.$invite['nom'].((!empty($invite['paiement']))?' <small><em>('.$invite['paiement'].')</em></small>':'').'<br>';
 				            }
 				          }elseif(!empty($guest['invitor'])){
@@ -460,7 +460,7 @@ class ListeInvites{
 		</div>
 		<?php endif ?> -->
 		<p class="pull-right">
-			<em><span class="guestCount" title="nombre d'utilisateurs affichés"><?php echo $this->countSqlReturnedinvites.'/'.$this->countinvites; ?></span> invités</em>
+			<em><span class="guestCount" title="nombre d'utilisateurs affichés"><?php echo $this->countSqlReturnedguests.'/'.$this->countguests; ?></span> invités</em>
 		</p>
 	    <?php 
 	    $return = ob_get_contents();
@@ -483,7 +483,7 @@ class ListeInvites{
 		?><ul>
 			<?php for ($i=1; $i <= $this->countPages; $i++): ?>
 				<li id="p<?php echo $i ?>" <?php echo ($i == $this->page)?'class="active"':''; ?>>
-					<a class="page" id="p<?php echo $i ?>" href="admin_liste_invites.php?page=<?php echo $i ?>">
+					<a class="page" id="p<?php echo $i ?>" href="admin_liste_guests.php?page=<?php echo $i ?>">
 						<?php echo $i ?>
 					</a>
 				</li>
@@ -503,7 +503,7 @@ class ListeInvites{
 	// -------------------- Export functions -------------------- //
 
 	/**
-	 * exportParticipantsList génération en csv de la liste des participants sélectionés $this->invitesList
+	 * exportParticipantsList génération en csv de la liste des participants sélectionés $this->guestsList
 	 * @return csv fichier csv des participants sélectionnés
 	 **/
 	public function exportParticipantsList(){
@@ -511,9 +511,9 @@ class ListeInvites{
 		header('Content-Type: text/csv; charset=utf-8');
 		header('Content-Disposition: attachment; filename=data.csv');
 		// $sql = 'SELECT id , bracelet_id , nom , prenom , repas , buffet , is_icam , promo , email , telephone , inscription, icam_id AS idGarantIcam
-		// FROM invites g
-		// LEFT JOIN lien_icam_invite ihg ON g.id = ihg.guest_id';
-		$ParticipantsArray = $this->invitesList;
+		// FROM guests g
+		// LEFT JOIN icam_has_guest ihg ON g.id = ihg.guest_id';
+		$ParticipantsArray = $this->guestsList;
 		$output = fopen('php://output', 'w');
 
 		// output the column headings
@@ -571,9 +571,9 @@ class ListeInvites{
 			'page'                   => $this->page,
 			'perPages'               => $this->perPages,
 			'options'                => $this->options,
-			'globalCountinvites'      => $this->globalCountinvites,
-			'countinvites'            => $this->countinvites,
-			'countSqlReturnedinvites' => $this->countSqlReturnedinvites,
+			'globalCountguests'      => $this->globalCountguests,
+			'countguests'            => $this->countguests,
+			'countSqlReturnedguests' => $this->countSqlReturnedguests,
 			'countPages'             => $this->countPages
 		);
 	}
@@ -582,10 +582,10 @@ class ListeInvites{
 
 	public function __get($var){
 		if (!isset($this->$var)) {
-			// if (isset($this->invitesNumbers[$var])) {
-			// 	return $this->invitesNumbers[$var];
-			// }elseif (isset($this->icamAndTheirinvites[$var])) {
-			// 	return $this->icamAndTheirinvites[$var];
+			// if (isset($this->guestsNumbers[$var])) {
+			// 	return $this->guestsNumbers[$var];
+			// }elseif (isset($this->icamAndTheirguests[$var])) {
+			// 	return $this->icamAndTheirguests[$var];
 			// }elseif (isset($this->nightOptions[$var])) {
 			// 	return $this->nightOptions[$var];
 			// }else{

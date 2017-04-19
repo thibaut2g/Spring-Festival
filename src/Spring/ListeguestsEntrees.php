@@ -2,7 +2,7 @@
 
 namespace Spring;
 
-class ListeInvitesEntrees extends ListeInvites{
+class ListeguestsEntrees extends Listeguests{
 
 	const perPages = 10;
 
@@ -86,9 +86,9 @@ class ListeInvitesEntrees extends ListeInvites{
           <?php if(!empty($guest['paiement'])){ ?><i class="icon-shopping-cart"></i> Paiement : <?php echo $guest['paiement'].'<br>'; }?>
           <?php if(!empty($guest['price'])){ ?><i class="icon-shopping-cart"></i> Place : <?php echo $guest['price'].'€<br>'; }?>
           <?php 
-          if (!empty($guest['invites']) && is_array($guest['invites'])) {
-            echo '<strong>Invité'.(count($guest['invites'])==1?'':'s').' :</strong><br>';
-            foreach ($guest['invites'] as $invite) {
+          if (!empty($guest['guests']) && is_array($guest['guests'])) {
+            echo '<strong>Invité'.(count($guest['guests'])==1?'':'s').' :</strong><br>';
+            foreach ($guest['guests'] as $invite) {
               ?><i class="icon-<?php echo (isset($invite['sexe']) && $invite['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $invite['prenom'].' '.$invite['nom'].((!empty($invite['paiement']))?' <small><em>('.$invite['paiement'].')</em></small>':'').'<br>';
             }
           }elseif(!empty($guest['invitor'])){

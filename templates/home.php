@@ -26,13 +26,13 @@
                 <tr>
                   <td><strong><?= $PBars->totalGuests; ?></strong></td>
                   <td><em rel="tooltip" title="Progression du jour">(+<?= $PBars->progressionGuest; ?>)</em></td>
-                  <td><?= $PBars->getinvites(); ?></td>
+                  <td><?= $PBars->getguests(); ?></td>
                   <td>Total d'invités au Spring</td>
                 </tr>
                 <tr>
                   <td><strong><?= $PBars->Icam; ?></strong></td>
                   <td><em rel="tooltip" title="Nouveaux Icams du jour">(+<?= $PBars->progressionIcam; ?>)</em></td>
-                  <td><?= $PBars->getIcamAndTheirinvites(); ?></td>
+                  <td><?= $PBars->getIcamAndTheirguests(); ?></td>
                   <td>Les Icams au Spring</td>
                 </tr>
                 <?php if ($Auth->isAdmin()): ?>

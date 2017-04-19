@@ -8,11 +8,11 @@ namespace Spring;
 class Participant{
 	private $id;
 	private $attr;
-	private $invites;
+	private $guests;
 	private $invitor;
 	private $DB;
 
-	public static $invitesCount;
+	public static $guestsCount;
 
 	public static $promos = array(
 		'Intégrés'             =>array(117=>117,118=>118,119=>119,120=>120,121=>121),
@@ -38,37 +38,37 @@ class Participant{
 	);
 
 public static $prixParPromo = array(
-		'121' => array('nbInvites' => 1,
+		'121' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'120' => array('nbInvites' => 1,
+		'120' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'119' => array('nbInvites' => 1,
+		'119' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'118' => array('nbInvites' => 1,
+		'118' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'117' => array('nbInvites' => 1,
+		'117' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'2021' => array('nbInvites' => 1,
+		'2021' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'2020' => array('nbInvites' => 1,
+		'2020' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'2019' => array('nbInvites' => 1,
+		'2019' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'2018' => array('nbInvites' => 1,
+		'2018' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => NULL),
 				'prixInvite' => array("soiree" => 15)),
-		'2017' => array('nbInvites' => 1,
+		'2017' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15)),
-		'Ingenieur' => array('nbInvites' => 1,
+		'Ingenieur' => array('nbguests' => 1,
 				'prixIcam' => array("soiree" => 15),
 				'prixInvite' => array("soiree" => 15))
 	);
@@ -77,7 +77,7 @@ public static $prixParPromo = array(
     public static $sexe = array('1'=>'Homme','2'=>'Femme');
     public static $formule = array('Soirée'=>'Soirée');
 
-	const TABLE_NAME = 'invites';
+	const TABLE_NAME = 'guests';
 	const LOG_FILE = 'logs/log.txt';
 
 	// -------------------- Constructeur -------------------- //
@@ -104,7 +104,7 @@ public static $prixParPromo = array(
         $this->id = self::saveParticipantData($this->getAttrPlusId());
         $this->update();
         if ($this->is_icam == 0) {
-        	$this->clearinvites();
+        	$this->clearguests();
         }
         return $this->id;
 	}
@@ -123,7 +123,7 @@ public static $prixParPromo = array(
         $this->update();
         // Functions::setFlash('Changements effectués (id='.$this->id.')');
         if ($this->is_icam == 0) {
-        	$this->clearinvites();
+        	$this->clearguests();
         }
         return true;
 	}
@@ -134,10 +134,10 @@ public static $prixParPromo = array(
 			if(isset($this->attr['id'])) unset($this->attr['id']);
 			$this->updatePrice();
 		}
-		$invitesIds = $this->DB->find('lien_icam_invite',array('conditions'=>array('icam_id'=>$this->id),'fields'=>array('invite_id')));
-		foreach ($invitesIds as $guestId) { $guestId = current($guestId);
+		$guestsIds = $this->DB->find('icam_has_guest',array('conditions'=>array('icam_id'=>$this->id),'fields'=>array('invite_id')));
+		foreach ($guestsIds as $guestId) { $guestId = current($guestId);
 			if ($guestId != $this->id) {
-				$this->invites[] = new Participant($guestId);
+				$this->guests[] = new Participant($guestId);
 			}
 		}
 	}
@@ -149,9 +149,9 @@ public static $prixParPromo = array(
 	public function getAttrIdGuest(){
 		$return = !empty($this->attr)?$this->attr:array();
 		$return['id'] = $this->id;
-		if (is_array($this->invites)) {
-			foreach ($this->invites as $Guest) {
-				$return['invites'][] = $Guest->getAttrPlusId();
+		if (is_array($this->guests)) {
+			foreach ($this->guests as $Guest) {
+				$return['guests'][] = $Guest->getAttrPlusId();
 			}
 		}
 		return $return;
@@ -176,10 +176,10 @@ public static $prixParPromo = array(
 			$this->saveFields('sexe');
 		}
 	}
-	// ------------------------- Pour les Invites ------------------------- //
-	public function saveInvites($invites){
-		$this->clearinvites();
-		for ($i=0; $i < count($invites) ; $i++) { $guest = $invites[$i];
+	// ------------------------- Pour les guests ------------------------- //
+	public function saveguests($guests){
+		$this->clearguests();
+		for ($i=0; $i < count($guests) ; $i++) { $guest = $guests[$i];
 			if ($this->promo == "Parent")
 				$guest['promo'] = "Parent";
 			if ((isset($guest['id']) && $guest['id'] == $this->id) || (isset($guest['nom'],$guest['prenom']) && $guest['nom'] == $this->nom && $guest['prenom'] == $this->prenom)){
@@ -191,11 +191,11 @@ public static $prixParPromo = array(
 			}
 			elseif (!empty($guest['nom']) || !empty($guest['prenom'])) {
 				// if ($i == 0 || (($this->promo == '118' || $this->promo == '117' || $this->promo == 'Artiste Icam') && $i == 1) || ($this->promo == 'Artiste Icam' && $i == 2)) {
-					if ($i > 0 && $this->invites[0]->nom == $guest['nom'] && $this->invites[0]->prenom == $guest['prenom']) {
+					if ($i > 0 && $this->guests[0]->nom == $guest['nom'] && $this->guests[0]->prenom == $guest['prenom']) {
 						Functions::setFlash("Erreur, Vous ne pouvez pas inviter deux personnes du même nom si ?",'error');
 						return false;
 					}
-					$this->invites[$i] = $this->saveInvite($guest);
+					$this->guests[$i] = $this->saveInvite($guest);
 				// }
 			}
 		}
@@ -208,15 +208,15 @@ public static $prixParPromo = array(
 		self::assignGuest($this->id,$G->id);
 		return $G;
 	}
-	public function clearinvites(){
+	public function clearguests(){
 		global $DB;
-		$sql = "DELETE FROM lien_icam_invite WHERE icam_id = :icam_id";
+		$sql = "DELETE FROM icam_has_guest WHERE icam_id = :icam_id";
 		$DB->query($sql,array('icam_id'=>$this->id));
-		$this->invites = array();
+		$this->guests = array();
 	}
 	public function findThisIcamGarantId(){
 		global $DB;
-		return current($DB->query('SELECT icam_id FROM lien_icam_invite WHERE invite_id = :invite_id',array('invite_id' => $this->id)));
+		return current($DB->query('SELECT icam_id FROM icam_has_guest WHERE invite_id = :invite_id',array('invite_id' => $this->id)));
 	}
 
 	// ---------------------------------------- Static Functions ---------------------------------------- //
@@ -225,35 +225,35 @@ public static $prixParPromo = array(
 		global $DB;
 		if ($guestId == -1) {
 	      $q = array('bracelet_id'=>$bracelet_id);
-	      $sql = 'SELECT COUNT(bracelet_id) FROM invites WHERE bracelet_id = :bracelet_id';
+	      $sql = 'SELECT COUNT(bracelet_id) FROM guests WHERE bracelet_id = :bracelet_id';
 	    }else{
 	      $q = array('bracelet_id'=>$bracelet_id,'id'=>$guestId);
-	      $sql = 'SELECT COUNT(bracelet_id) FROM invites WHERE bracelet_id = :bracelet_id AND id != :id';
+	      $sql = 'SELECT COUNT(bracelet_id) FROM guests WHERE bracelet_id = :bracelet_id AND id != :id';
 	    }
 
-	    $invites = current($DB->queryFirst($sql, $q));
-	    if ($invites >=1)
+	    $guests = current($DB->queryFirst($sql, $q));
+	    if ($guests >=1)
 	      return 1;
 	    else
 	      return 0;
 	}
 
-	static public function getinvitesCount(){
+	static public function getguestsCount(){
 		global $DB;
-		if (empty(self::$invitesCount)) {
-			self::$invitesCount = $DB->findCount('invites');
-			return self::$invitesCount;
+		if (empty(self::$guestsCount)) {
+			self::$guestsCount = $DB->findCount('guests');
+			return self::$guestsCount;
 		}else{
-			return self::$invitesCount;
+			return self::$guestsCount;
 		}
 	}
 
-	public static function getInvites($id,$fields='*'){
+	public static function getguests($id,$fields='*'){
 		global $DB;
 		if (self::isGuest($id)) {
 			if (is_array($fields))
 				$fields = implode(', ', $fields);
-			$sql = 'SELECT '.$fields.' FROM lien_icam_invite LEFT JOIN invites ON invite_id = id WHERE icam_id = :icam_id';
+			$sql = 'SELECT '.$fields.' FROM icam_has_guest LEFT JOIN guests ON invite_id = id WHERE icam_id = :icam_id';
 			return $DB->query($sql,array('icam_id'=>$id));
 		}
 		return array();
@@ -265,7 +265,7 @@ public static $prixParPromo = array(
 		} else if (self::isGuest($id)) {
 			if (is_array($fields))
 				$fields = implode(', ', $fields);
-			$sql = 'SELECT '.$fields.' FROM lien_icam_invite LEFT JOIN invites ON icam_id = id WHERE invite_id = :invite_id';
+			$sql = 'SELECT '.$fields.' FROM icam_has_guest LEFT JOIN guests ON icam_id = id WHERE invite_id = :invite_id';
 			$retour = $DB->queryFirst($sql,array('invite_id'=>$id));
 			return $retour;
 		}
@@ -276,7 +276,7 @@ public static $prixParPromo = array(
 		if (self::isGuest($id)) {
 			if (is_array($fields))
 				$fields = implode(', ', $fields);
-			$sql = 'SELECT '.$fields.' FROM lien_icam_invite LEFT JOIN invites ON icam_id = id WHERE invite_id = :invite_id';
+			$sql = 'SELECT '.$fields.' FROM icam_has_guest LEFT JOIN guests ON icam_id = id WHERE invite_id = :invite_id';
 			$retour = $DB->queryFirst($sql,array('invite_id'=>$id));
 			return $retour;
 		}
@@ -285,12 +285,12 @@ public static $prixParPromo = array(
 
 	public static function assignGuest($icam_id,$invite_id){
 		global $DB;
-		$lien_icam_invite = array('icam_id' => $icam_id,'invite_id' => $invite_id);
-		// lien_icam_invite
-		$sql = 'SELECT COUNT(*) FROM lien_icam_invite WHERE icam_id = :icam_id AND invite_id = :invite_id';
-		$isAlreadyInvited = current($DB->queryFirst('SELECT COUNT(*) FROM lien_icam_invite WHERE invite_id = '.$invite_id));
-		$sql = "INSERT INTO lien_icam_invite (icam_id ,invite_id) VALUES (:icam_id, :invite_id)";
-		$DB->query($sql,$lien_icam_invite);
+		$icam_has_guest = array('icam_id' => $icam_id,'invite_id' => $invite_id);
+		// icam_has_guest
+		$sql = 'SELECT COUNT(*) FROM icam_has_guest WHERE icam_id = :icam_id AND invite_id = :invite_id';
+		$isAlreadyInvited = current($DB->queryFirst('SELECT COUNT(*) FROM icam_has_guest WHERE invite_id = '.$invite_id));
+		$sql = "INSERT INTO icam_has_guest (icam_id ,invite_id) VALUES (:icam_id, :invite_id)";
+		$DB->query($sql,$icam_has_guest);
 		if ($isAlreadyInvited != 0) {
 			Functions::setFlash("Un invité du même nom existe déjà",'info');
 		}
@@ -370,7 +370,7 @@ public static $prixParPromo = array(
     **/
     public static function check_delete($page=null){
         if (empty($page))
-            $page = 'admin_liste_invites.php';
+            $page = 'admin_liste_guests.php';
         if(!empty($_GET['del_guest'])){
             $title = 'Invité';
             self::deleteGuest($_GET['del_guest']);
@@ -380,7 +380,7 @@ public static $prixParPromo = array(
                 $_POST['action'] = $_POST['action2'];
             if ($_POST['action'] == 'delete') {
                 $flash = array();
-                foreach ($_POST['invites'] as $id) {
+                foreach ($_POST['guests'] as $id) {
                     self::deleteGuest($id);
                 }
             }
@@ -390,26 +390,26 @@ public static $prixParPromo = array(
 
 	public static function findIcamGarantId($invite_id){
 		global $DB;
-		if (current($DB->queryFirst('SELECT id FROM invites WHERE id = :id AND is_icam = 1',array('id'=>$invite_id))))
+		if (current($DB->queryFirst('SELECT id FROM guests WHERE id = :id AND is_icam = 1',array('id'=>$invite_id))))
 			return $invite_id;
 		else
-			return current($DB->queryFirst('SELECT icam_id FROM lien_icam_invite WHERE invite_id = :invite_id',array('invite_id' => $invite_id)));
+			return current($DB->queryFirst('SELECT icam_id FROM icam_has_guest WHERE invite_id = :invite_id',array('invite_id' => $invite_id)));
 	}
 
     public static function deleteGuest($id){
     	global $DB;
-    	if ($DB->findCount('invites',"id=$id") != 0) {
-        	$invites = $DB->query('SELECT * FROM lien_icam_invite WHERE icam_id = :icam_id',array('icam_id'=>$id));
-            $DB->delete('lien_icam_invite','icam_id='.$id);
-            $DB->delete('lien_icam_invite','invite_id='.$id);
+    	if ($DB->findCount('guests',"id=$id") != 0) {
+        	$guests = $DB->query('SELECT * FROM icam_has_guest WHERE icam_id = :icam_id',array('icam_id'=>$id));
+            $DB->delete('icam_has_guest','icam_id='.$id);
+            $DB->delete('icam_has_guest','invite_id='.$id);
             $DB->delete('entrees','invite_id='.$id);
-            $DB->delete('invites','id='.$id);
+            $DB->delete('guests','id='.$id);
             self::ajouterAuxLog(date('Y-m-d h:i:s').' : Suppression invité #'.$id."\n");
-            if (!empty($invites)) {
+            if (!empty($guests)) {
             	$guestDeleted = 0;
-            	foreach ($invites as $guest) {
+            	foreach ($guests as $guest) {
             		$DB->delete('entrees','invite_id='.$guest['invite_id']);
-            		$DB->delete('invites','id='.$guest['invite_id']);
+            		$DB->delete('guests','id='.$guest['invite_id']);
             		self::ajouterAuxLog(date('Y-m-d h:i:s').' : Suppression invité #'.$guest['invite_id']."\n");
             		$guestDeleted++;
             	}
@@ -443,10 +443,10 @@ public static $prixParPromo = array(
 	static public function updateAllDataBase(){
 		global $DB;
 		debug($DB->queryFirst('SELECT SUM(price) globalPrice FROM '.self::TABLE_NAME),'avant');
-		$invitesIds = Functions::getFirstVals($DB->find(self::TABLE_NAME,array('fields'=>array('id'))));
-		// debug($invitesIds,'$invitesIds');
+		$guestsIds = Functions::getFirstVals($DB->find(self::TABLE_NAME,array('fields'=>array('id'))));
+		// debug($guestsIds,'$guestsIds');
 		$price = array();
-		foreach ($invitesIds as $id) {
+		foreach ($guestsIds as $id) {
 			$Guest = new Participant($id);
 			$Guest->updatePrice();
 			// $Guest->updateSexe();
@@ -458,17 +458,17 @@ public static $prixParPromo = array(
 
 	static public function resetEntrees(){
 		global $DB;
-		$invites = $DB->query('SELECT id FROM invites');
-		foreach ($invites as $k => $v) {
-			$invites[$k] = array(
+		$guests = $DB->query('SELECT id FROM guests');
+		foreach ($guests as $k => $v) {
+			$guests[$k] = array(
 				'invite_id'    => current($v)
 				// 'arrived'      => 0,
 				// 'arrival_time' => $time
 			);
 		}
 		$DB->query('TRUNCATE TABLE entrees;');
-		$DB->save('entrees',array('fields'=>array('invite_id'/*,'arrived','arrival_time'*/),'values'=>$invites),'insert');
-		$DB->query('UPDATE entrees LEFT JOIN invites ON id = invite_id SET `arrived` = 1, `arrival_time` = CURRENT_TIMESTAMP( ) WHERE promo = 119;');
+		$DB->save('entrees',array('fields'=>array('invite_id'/*,'arrived','arrival_time'*/),'values'=>$guests),'insert');
+		$DB->query('UPDATE entrees LEFT JOIN guests ON id = invite_id SET `arrived` = 1, `arrival_time` = CURRENT_TIMESTAMP( ) WHERE promo = 119;');
 		return true;
 	}
 
@@ -483,21 +483,21 @@ public static $prixParPromo = array(
 	static public function getGuestForm($nb = 0, $form){
 		global $DB;
 		global $Auth;
-		if (!isset($form->data['invites'][$nb]['inscription']))
-			$form->data['invites'][$nb]['inscription'] = date('Y-m-d H:i:s');
+		if (!isset($form->data['guests'][$nb]['inscription']))
+			$form->data['guests'][$nb]['inscription'] = date('Y-m-d H:i:s');
 		ob_start(); ?>
 		<div id="invite<?php echo ($nb+1); ?>" class="span invite">
 		    <legend>Invité <?php echo ($nb+1); ?></legend>
 		    <div>
-		    	<?php echo $form->input('invites['.$nb.'][id]', 'hidden'); ?>
+		    	<?php echo $form->input('guests['.$nb.'][id]', 'hidden'); ?>
 		    	<?php if($Auth->isAdmin())
-		    			echo $form->input('invites['.$nb.'][inscription]','Date d\'inscription : ', array('maxlength'=>"20",'class'=>'datetimepicker'));
-		    		else echo $form->input('invites['.$nb.'][inscription]', 'hidden');?>
-		        <?php echo $form->input('invites['.$nb.'][nom]','Nom : ', array('maxlength'=>'155')); ?>
-		        <?php echo $form->input('invites['.$nb.'][prenom]','Prénom : ', array('maxlength'=>'155'/*, 'required'=>'1'*/)); ?>
-		        <?php echo $form->select('invites['.$nb.'][sexe]', 'Homme/Femme : ', array('data'=>Participant::$sexe)); ?>
-		        <?php echo $form->select('invites['.$nb.'][paiement]', 'Paiement : ', array('data'=>Participant::$paiement)); ?>
-		        <?php echo $form->input('invites['.$nb.'][bracelet_id]','Numero du bracelet : ', array('maxlength'=>'4','class'=>'input-mini bracelet_id')); ?>
+		    			echo $form->input('guests['.$nb.'][inscription]','Date d\'inscription : ', array('maxlength'=>"20",'class'=>'datetimepicker'));
+		    		else echo $form->input('guests['.$nb.'][inscription]', 'hidden');?>
+		        <?php echo $form->input('guests['.$nb.'][nom]','Nom : ', array('maxlength'=>'155')); ?>
+		        <?php echo $form->input('guests['.$nb.'][prenom]','Prénom : ', array('maxlength'=>'155'/*, 'required'=>'1'*/)); ?>
+		        <?php echo $form->select('guests['.$nb.'][sexe]', 'Homme/Femme : ', array('data'=>Participant::$sexe)); ?>
+		        <?php echo $form->select('guests['.$nb.'][paiement]', 'Paiement : ', array('data'=>Participant::$paiement)); ?>
+		        <?php echo $form->input('guests['.$nb.'][bracelet_id]','Numero du bracelet : ', array('maxlength'=>'4','class'=>'input-mini bracelet_id')); ?>
 		    </div>
 		</div>
 	    <?php

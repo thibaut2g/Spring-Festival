@@ -13,13 +13,13 @@
   if(!isset ($form))
     $form = new form();
 
-  $form->set($Listinvites->getListFormParams());
-  if (!isset($form->data['options']['selectinvites']))
-    $form->data['options']['selectinvites'] = 1;
+  $form->set($Listguests->getListFormParams());
+  if (!isset($form->data['options']['selectguests']))
+    $form->data['options']['selectguests'] = 1;
   if (!isset($form->data['options']['selectAllPromos']))
     $form->data['options']['selectAllPromos'] = 1;
-  if (isset($form->data['options']['selectAllPromos'],$form->data['options']['selectinvites']) && $form->data['options']['selectinvites'] == 0 && $form->data['options']['selectAllPromos'] == 0 && empty($form->data['options']['promo'])) {
-    $form->data['options']['selectinvites'] = 1;
+  if (isset($form->data['options']['selectAllPromos'],$form->data['options']['selectguests']) && $form->data['options']['selectguests'] == 0 && $form->data['options']['selectAllPromos'] == 0 && empty($form->data['options']['promo'])) {
+    $form->data['options']['selectguests'] = 1;
     $form->data['options']['selectAllPromos'] = 1;
   }
 
@@ -35,38 +35,38 @@
 
 <form id="form" action="#">
 
-  <?php echo $form->input('page', 'hidden', array('value'=>$Listinvites->page)); ?>
+  <?php echo $form->input('page', 'hidden', array('value'=>$Listguests->page)); ?>
 
-  <div class="clearfix"><?php echo $Listinvites->getActionsGroupees(1); ?></div>
-  <div class="pagination"><?php echo $Listinvites->getPagination(); ?></div>
+  <div class="clearfix"><?php echo $Listguests->getActionsGroupees(1); ?></div>
+  <div class="pagination"><?php echo $Listguests->getPagination(); ?></div>
 
 
-  <table class="table table-bordered table-striped" id="invitesList">
+  <table class="table table-bordered table-striped" id="guestsList">
 
       <thead>
-        <?php echo $Listinvites->getTHead(); ?>
+        <?php echo $Listguests->getTHead(); ?>
       </thead>
       <tbody id="resultat">
-        <?php echo $Listinvites->getGuestAsTr(); ?>
+        <?php echo $Listguests->getGuestAsTr(); ?>
       </tbody>
-      <?php if ($Listinvites->countinvites > 10): ?>
+      <?php if ($Listguests->countguests > 10): ?>
       <tfoot>
-        <?php echo $Listinvites->getTHead(); ?>
+        <?php echo $Listguests->getTHead(); ?>
       </tfoot>
       <?php endif ?>
 
   </table>
 
-  <?php if ($Listinvites->countinvites > 10): ?>
+  <?php if ($Listguests->countguests > 10): ?>
 
-    <div class="pagination"><?php echo $Listinvites->getPagination(); ?></div>
-    <div class="clearfix"><?php echo $Listinvites->getActionsGroupees(2); ?></div>
+    <div class="pagination"><?php echo $Listguests->getPagination(); ?></div>
+    <div class="clearfix"><?php echo $Listguests->getActionsGroupees(2); ?></div>
 
   <?php endif ?>
 
 </form>
 
 <?php
-  // Functions::tablesorter('invitesList','[8,1],[4,0]','0: {sorter: false},11: {sorter: false}');
+  // Functions::tablesorter('guestsList','[8,1],[4,0]','0: {sorter: false},11: {sorter: false}');
 
 ?>

@@ -44,7 +44,7 @@ if ($invite_id == -1) {
 
     <fieldset class="isIcam">
 
-    	<?php $nb = ((count($Guest->invites)>2)?count($Guest->invites):2);
+    	<?php $nb = ((count($Guest->guests)>2)?count($Guest->guests):2);
     	 for ($i=0; $i < $nb; $i+=2) { ?>
 			<div class="row">
 				<?php echo \Spring\Participant::getGuestForm($i, $form); ?>

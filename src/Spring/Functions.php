@@ -170,7 +170,7 @@ class Functions{
 
     static function isGuest($id){
         global $DB;
-        if (is_numeric($id) && $DB->findCount('invites',array('id'=>$id)) == 1) return true;
+        if (is_numeric($id) && $DB->findCount('guests',array('id'=>$id)) == 1) return true;
         else return false;
     }
 

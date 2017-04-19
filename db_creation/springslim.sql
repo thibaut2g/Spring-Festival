@@ -84,10 +84,10 @@ CREATE TABLE IF NOT EXISTS `entrees` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `invites`
+-- Structure de la table `guests`
 --
 
-CREATE TABLE IF NOT EXISTS `invites` (
+CREATE TABLE IF NOT EXISTS `guests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) NOT NULL,
   `prenom` varchar(50) NOT NULL,
@@ -104,10 +104,10 @@ CREATE TABLE IF NOT EXISTS `invites` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51 ;
 
 --
--- Contenu de la table `invites`
+-- Contenu de la table `guests`
 --
 
-INSERT INTO `invites` (`id`, `nom`, `prenom`, `is_icam`, `promo`, `email`, `telephone`, `inscription`, `sexe`, `bracelet_id`, `paiement`, `price`) VALUES
+INSERT INTO `guests` (`id`, `nom`, `prenom`, `is_icam`, `promo`, `email`, `telephone`, `inscription`, `sexe`, `bracelet_id`, `paiement`, `price`) VALUES
 (47, 'Bon', 'Jean', 1, '118', 'jean.bon@2018.icam.fr', '', '2017-04-15 10:28:18', 1, 0, 'espece', 15),
 (48, 'Tille', 'Jean', 0, '', '', '', '2017-04-15 10:28:18', 1, 0, 'espece', 15),
 (49, 'Pide', 'Stu', 0, '', '', '', '2017-04-15 10:28:18', 1, 0, 'espece', 15),
@@ -116,20 +116,20 @@ INSERT INTO `invites` (`id`, `nom`, `prenom`, `is_icam`, `promo`, `email`, `tele
 -- --------------------------------------------------------
 
 --
--- Structure de la table `lien_icam_invite`
+-- Structure de la table `icam_has_guest`
 --
 
-CREATE TABLE IF NOT EXISTS `lien_icam_invite` (
+CREATE TABLE IF NOT EXISTS `icam_has_guest` (
   `icam_id` int(11) NOT NULL,
   `invite_id` int(11) NOT NULL,
   PRIMARY KEY (`icam_id`,`invite_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `lien_icam_invite`
+-- Contenu de la table `icam_has_guest`
 --
 
-INSERT INTO `lien_icam_invite` (`icam_id`, `invite_id`) VALUES
+INSERT INTO `icam_has_guest` (`icam_id`, `invite_id`) VALUES
 (47, 48),
 (47, 49);
 

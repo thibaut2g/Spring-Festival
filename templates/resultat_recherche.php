@@ -1,20 +1,20 @@
 <?php
 
-  echo $ListInvites->getGuestAsTr();
+  echo $Listguests->getGuestAsTr();
    
 ?>
 
 <script>
   jQuery(function() {
     $('.inviteCount').each(function(event) {
-      $(this).html(<?php echo '"'.$ListInvites->countSqlReturnedInvites.'/'.$ListInvites->countInvites.'"' ?>);
+      $(this).html(<?php echo '"'.$Listguests->countSqlReturnedguests.'/'.$Listguests->countguests.'"' ?>);
     });
     $('.pagination').each(function(event) {
       // Special for js : replace the \n with \\n...
-      var pagination = '<?php echo $ListInvites->getPagination(1); ?>';
+      var pagination = '<?php echo $Listguests->getPagination(1); ?>';
       $(this).html(pagination);
     });
-    $('input[name="page"]').val(<?php echo $ListInvites->page; ?>);
+    $('input[name="page"]').val(<?php echo $Listguests->page; ?>);
 
     $(".page").click(function(event){
       pageHiddenInput.val($(this).attr('id').replace('p',''));

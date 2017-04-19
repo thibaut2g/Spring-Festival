@@ -1,5 +1,5 @@
 <?php 
-  echo $ListeInvites->getGuestAsTr();
+  echo $Listeguests->getGuestAsTr();
  ?>
 
 <script>

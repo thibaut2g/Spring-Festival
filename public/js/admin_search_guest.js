@@ -13,7 +13,7 @@ function checkXhr(xhrName){
 function checkPopover () {
   jQuery(function($){
     $('div.popover').fadeOut(500,function(event){$(this).remove();});
-    $('#invitesList a[rel="popover"]').each(function(){
+    $('#guestsList a[rel="popover"]').each(function(){
       var title = $(this).next('.infos').find('.title').html();
       var message = $(this).next('.infos').find('.message').html();
       $(this).popover({
@@ -42,8 +42,8 @@ function hideLoader () {
 
 function refreshGuestList() {
   showLoader();
-  checkXhr('invitesId');
-  xhr['invitesId'] = jQuery.ajax({
+  checkXhr('guestsId');
+  xhr['guestsId'] = jQuery.ajax({
     type : "POST",
     url : "resultat_recherche.php",
     data : searchForm.serialize(),

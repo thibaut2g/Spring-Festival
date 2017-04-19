@@ -45,11 +45,11 @@ $app->get('/liste_participants', function ($request, $response, $args) {
     $flash = $this->flash;
     $RouteHelper = new \Spring\RouteHelper($this, $request, 'Participants');
     $form = new \Spring\Forms();
-    $Listinvites = new \Spring\ListeInvites();
+    $Listguests = new \Spring\Listeguests();
     $js_for_layout[] = 'admin_search_guest.js';
     
     $this->renderer->render($response, 'header.php', compact('flash', 'RouteHelper', 'Auth', $args));
-    $this->renderer->render($response, 'liste_participants.php', compact('RouteHelper', 'Auth', 'form', 'Listinvites', $args));
+    $this->renderer->render($response, 'liste_participants.php', compact('RouteHelper', 'Auth', 'form', 'Listguests', $args));
     return $this->renderer->render($response, 'footer.php', compact('RouteHelper', 'Auth', 'js_for_layout', $args));
 })->setName('liste_participants');
 
@@ -144,7 +144,7 @@ $app->post('/ajout_invite/{invite_id}', function ($request, $response, $args) {
 
             if ($Guest->is_icam == 1) {
 
-                $Guest->saveInvites($_POST['invites']);
+                $Guest->saveguests($_POST['guests']);
 
             }
 
@@ -179,16 +179,16 @@ $app->get('/entrees', function ($request, $response, $args) {
 
     $flash = $this->flash;
     $RouteHelper = new \Spring\RouteHelper($this, $request, 'Entrées');
-    $ListeInvites = new \Spring\ListeInvitesEntrees(array('perPages'=>0));
+    $Listeguests = new \Spring\ListeguestsEntrees(array('perPages'=>0));
 
-    if ((isset($_GET['page']) && $_GET['page'] != $ListeInvites->page) || (isset($_POST['page']) && $_POST['page'] != $ListeInvites->page)) {
+    if ((isset($_GET['page']) && $_GET['page'] != $Listeguests->page) || (isset($_POST['page']) && $_POST['page'] != $Listeguests->page)) {
         return $response->withStatus(302)->withHeader('Location', $this->router->pathFor('liste_participants'));
     }
 
     $js_for_layout[] = 'admin_search_guest_entrees.js';
 
     $this->renderer->render($response, 'header.php', compact('Auth', 'flash', 'RouteHelper', $args));
-    $this->renderer->render($response, 'entrees.php', compact('Auth', 'ListeInvites', 'RouteHelper', $args));
+    $this->renderer->render($response, 'entrees.php', compact('Auth', 'Listeguests', 'RouteHelper', $args));
     return $this->renderer->render($response, 'footer.php', compact('Auth', 'RouteHelper', $args));
 })->setName('entrees');
 
@@ -207,9 +207,9 @@ $app->post('/resultat_recherche.php', function ($request, $response, $args) {
       else
         $dataForm = $_POST;
 
-    $ListInvites = new \Spring\ListeInvites($dataForm);
+    $Listguests = new \Spring\Listeguests($dataForm);
     
-    $this->renderer->render($response, 'resultat_recherche.php', compact('Auth', 'ListInvites', $args));
+    $this->renderer->render($response, 'resultat_recherche.php', compact('Auth', 'Listguests', $args));
 })->setName('resultat_recherche.php');
 
 
@@ -227,9 +227,9 @@ $app->post('/resultat_invite_soiree.php', function ($request, $response, $args) 
     else
         $dataForm['perPages'] = 10;
     
-    $ListeInvites = new \Spring\ListeInvitesEntrees($dataForm);
+    $Listeguests = new \Spring\ListeguestsEntrees($dataForm);
     
-    $this->renderer->render($response, 'resultat_invite_soiree.php', compact('Auth', 'ListeInvites', $args));
+    $this->renderer->render($response, 'resultat_invite_soiree.php', compact('Auth', 'Listeguests', $args));
 })->setName('resultat_invite_soiree.php');
 
 

@@ -6,13 +6,13 @@
 </h1>
 
 <form id="form" action="#">
-<div class="clearfix"><?php echo $ListeInvites->getActionsGroupees(1); ?></div><br>
+<div class="clearfix"><?php echo $Listeguests->getActionsGroupees(1); ?></div><br>
 <table class="table table-bordered table-striped" id="guestsList">
     <thead>
-      <?php echo $ListeInvites->getTHead(); ?>
+      <?php echo $Listeguests->getTHead(); ?>
     </thead>
     <tbody id="resultat">
-      <?php echo $ListeInvites->getGuestAsTr(); ?>
+      <?php echo $Listeguests->getGuestAsTr(); ?>
     </tbody>
 </table>
 </form>
