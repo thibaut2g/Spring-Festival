@@ -174,6 +174,25 @@ $app->get('/liste_participants/supprimer/{invite}', function ($request, $respons
 })->setName('supprimer_invite');
 
 
+$app->get('/entrees', function ($request, $response, $args) {
+    global $Auth;
+
+    $flash = $this->flash;
+    $RouteHelper = new \Spring\RouteHelper($this, $request, 'Entrées');
+    $ListeInvites = new \Spring\ListeInvitesEntrees(array('perPages'=>0));
+
+    if ((isset($_GET['page']) && $_GET['page'] != $ListeInvites->page) || (isset($_POST['page']) && $_POST['page'] != $ListeInvites->page)) {
+        return $response->withStatus(302)->withHeader('Location', $this->router->pathFor('liste_participants'));
+    }
+
+    $js_for_layout[] = 'admin_search_guest_entrees.js';
+
+    $this->renderer->render($response, 'header.php', compact('Auth', 'flash', 'RouteHelper', $args));
+    $this->renderer->render($response, 'entrees.php', compact('Auth', 'ListeInvites', 'RouteHelper', $args));
+    return $this->renderer->render($response, 'footer.php', compact('Auth', 'RouteHelper', $args));
+})->setName('entrees');
+
+
 /////////////////////
 // Fichier Annexes //
 /////////////////////
@@ -192,6 +211,34 @@ $app->post('/resultat_recherche.php', function ($request, $response, $args) {
     
     $this->renderer->render($response, 'resultat_recherche.php', compact('Auth', 'ListInvites', $args));
 })->setName('resultat_recherche.php');
+
+
+$app->post('/resultat_invite_soiree.php', function ($request, $response, $args) {
+    global $Auth, $DB;
+
+    $dataForm = array();
+    if (isset($_GET['recherche1']))
+        $dataForm = $_GET;
+    else
+        $dataForm = $_POST;
+
+    if (isset($dataForm['recherche1']) && $dataForm['recherche1'] == '')
+        $dataForm['perPages'] = 0;
+    else
+        $dataForm['perPages'] = 10;
+    
+    $ListeInvites = new \Spring\ListeInvitesEntrees($dataForm);
+    
+    $this->renderer->render($response, 'resultat_invite_soiree.php', compact('Auth', 'ListeInvites', $args));
+})->setName('resultat_invite_soiree.php');
+
+
+$app->post('/soiree_validee.php', function ($request, $response, $args) {
+    global $Auth, $DB;
+    
+    $this->renderer->render($response, 'soiree_validee.php', compact('Auth', 'DB', $args));
+
+})->setName('soiree_validee.php');
 
 
 $app->get('/ajout_invite', function ($request, $response, $args) {

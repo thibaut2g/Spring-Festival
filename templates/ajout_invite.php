@@ -4,7 +4,17 @@
 
 ?>
 
-<h1 class="page-header"><?php echo 'Ajouter un nouvel invité' ?></h1>
+<h1 class="page-header">
+<?php 
+if ($invite_id == -1) {
+    echo "Ajouter un invité";
+}else{
+    echo "Editer l'invité";
+}
+
+?>
+    
+</h1>
 
 <form action="<?= $invite_id ?>" method="post" class="form-horizontal">
 

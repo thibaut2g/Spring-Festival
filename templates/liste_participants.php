@@ -33,7 +33,7 @@
 <div id="post"></div>
 
 
-<form id="form" action="admin_liste_invites.php" method="POST">
+<form id="form" action="#">
 
   <?php echo $form->input('page', 'hidden', array('value'=>$Listinvites->page)); ?>
 

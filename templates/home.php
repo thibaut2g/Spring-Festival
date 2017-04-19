@@ -1,4 +1,4 @@
-<div class="hero-unit">
+<div class="jumbotron">
         <h1>Spring Festival <small><strong>Administration</strong></small></h1> <!--titre en haut-->
 
         <div class="numbers">
@@ -12,13 +12,13 @@
         </div>
 </div>
 
-<div class="row-fluid privatePage clearfix">
+<div class="row">
 
-    <div class="span6 well pull-left">
-        <img src="<?= $RouteHelper->publicPath ?>img/logospring.jpg" alt="logo du spring">
+    <div class="col-xs-6">
+        <img src="<?= $RouteHelper->publicPath ?>img/logospring.jpg" alt="logo du spring" >
     </div>
 
-    <div class="span6 well pull-right">
+    <div class="col-xs-6">
         <h1 class="page-header">Contenu du site</h1>
         <table class="table">
             <!-- <caption><h2>Contenu du site</h2></caption> -->
@@ -82,10 +82,9 @@
 	}
 
 	.numbers {
-		float: right;
+		display: block;
 	    overflow: hidden;
 	    *zoom: 1; 
-	    margin-top:-40px;
 	}
 
 </style>

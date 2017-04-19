@@ -47,20 +47,15 @@
 
             <li class="dropdown" id="admin">
 
-              <a data-toggle="dropdown" class="dropdown-toggle" href="#">Inscriptions Spring <b class="caret"></b></a>
-
-              <ul class="dropdown-menu">
-
                 <li><a href="<?= $RouteHelper->getPathFor('liste_participants') ?>"><i class="icon-book"></i> Liste des participants</a></li>
                 <li><a href="<?= $RouteHelper->getPathFor('ajout_invite') ?>"><i class="icon-plus"></i> Ajouter un invité</a></li>
 
-              </ul>
 
             </li>
 
             <?php } ?>
 
-            <?php if ($Auth->isLogged()){?>
+<!--             <?php if ($Auth->isLogged()){?>
 
               <li class="dropdown" id="admin">
 
@@ -72,13 +67,13 @@
                   <li><a href="<?= $RouteHelper->getPathFor('parametre_jour_meme') ?>"><i class="icon-wrench"></i> Paramêtres jour-même</a></li>
                   <?php } ?>
 
-                  <li><a href="<?= $RouteHelper->getPathFor('arrivee_invites') ?>"><i class="icon-plus"></i> Entrées</a></li>
+                  <li><a href="<?= $RouteHelper->getPathFor('entrees') ?>"><i class="icon-plus"></i> Entrées</a></li>
 
                 </ul>
 
               </li>
 
-              <?php } ?>
+              <?php } ?> -->
 
             </ul>
 
@@ -87,7 +82,7 @@
 
               <li><a><em>Bonjour <?php echo $_SESSION['Auth']['prenom']?></em></a></li> 
 
-              <?php 
+             <!--  <?php 
 
                 if ($Auth->isAdmin()){ ?>
 
@@ -105,7 +100,7 @@
                   </ul>
                 </li>
 
-              <?php } ?> 
+              <?php } ?>  -->
 
             <li><a href="<?= $RouteHelper->getPathFor('logout') ?>">Déconnexion</a></li>
           </ul>
