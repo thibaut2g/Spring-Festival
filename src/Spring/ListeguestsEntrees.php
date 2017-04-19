@@ -41,7 +41,7 @@ class ListeguestsEntrees extends Listeguests{
         	}
 		}
 
-		return array('where'=>$where,'data'=>$q,'leftJoin'=>'LEFT JOIN entrees ON entrees.invite_id = id');
+		return array('where'=>$where,'data'=>$q,'leftJoin'=>'LEFT JOIN entrees ON entrees.guest_id = id');
 	}
 
 	public function getGuestAsTr(){
@@ -88,8 +88,8 @@ class ListeguestsEntrees extends Listeguests{
           <?php 
           if (!empty($guest['guests']) && is_array($guest['guests'])) {
             echo '<strong>Invité'.(count($guest['guests'])==1?'':'s').' :</strong><br>';
-            foreach ($guest['guests'] as $invite) {
-              ?><i class="icon-<?php echo (isset($invite['sexe']) && $invite['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $invite['prenom'].' '.$invite['nom'].((!empty($invite['paiement']))?' <small><em>('.$invite['paiement'].')</em></small>':'').'<br>';
+            foreach ($guest['guests'] as $guest) {
+              ?><i class="icon-<?php echo (isset($guest['sexe']) && $guest['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $guest['prenom'].' '.$guest['nom'].((!empty($guest['paiement']))?' <small><em>('.$guest['paiement'].')</em></small>':'').'<br>';
             }
           }elseif(!empty($guest['invitor'])){
           echo '<strong>Invité par :</strong><br>';

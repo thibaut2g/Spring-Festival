@@ -3,7 +3,7 @@
   <div class="pull-left">Liste des participants au Spring Festival</div>
   <div class="pull-right">
     <a id="export" href="export_liste_participants.php" class="btn btn-primary btn-large" onlick="">Exporter</a>
-    <a href="ajout_invite" class="btn btn-primary btn-large">Ajouter un invité</a>
+    <a href="ajout_guest" class="btn btn-primary btn-large">Ajouter un invité</a>
   </div>
 
 </h1>

@@ -128,8 +128,8 @@ class Listeguests{
 				$sql = 'SELECT '.$fields.' FROM guests LEFT JOIN icam_has_guest ihg ON ihg.guest_id = id '.(($leftJoin != '')?$leftJoin:'').' WHERE icam_id = :icam_id '.((!empty($whereOptions))?' AND '.$whereOptions:'');
 				$retourguests = $DB->query($sql, array('icam_id'=>$guestIcam['id']));
 				if (!empty($retourguests)) {
-					foreach ($retourguests as $invite) {
-						$retour2[] = $invite;
+					foreach ($retourguests as $guest) {
+						$retour2[] = $guest;
 					}
 				}
 			}
@@ -375,8 +375,8 @@ class Listeguests{
 				          <?php 
 				          if (!empty($guest['guests']) && is_array($guest['guests'])) {
 				            echo '<strong>Invité'.(count($guest['guests'])==1?'':'s').' :</strong><br>';
-				            foreach ($guest['guests'] as $invite) {
-				              ?><i class="icon-<?php echo (isset($invite['sexe']) && $invite['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $invite['prenom'].' '.$invite['nom'].((!empty($invite['paiement']))?' <small><em>('.$invite['paiement'].')</em></small>':'').'<br>';
+				            foreach ($guest['guests'] as $guest) {
+				              ?><i class="icon-<?php echo (isset($guest['sexe']) && $guest['sexe']==2)?'girl':'user'; ?>"></i> <?php echo $guest['prenom'].' '.$guest['nom'].((!empty($guest['paiement']))?' <small><em>('.$guest['paiement'].')</em></small>':'').'<br>';
 				            }
 				          }elseif(!empty($guest['invitor'])){
 				          echo '<strong>Invité par :</strong><br>';
@@ -385,7 +385,7 @@ class Listeguests{
 				          }?>
 				        </div>
 				      </div>
-				      <a href="ajout_invite/<?php $resultat = \Spring\Participant::findIcamGarantId($guest['id']); echo $resultat
+				      <a href="ajout_guest/<?php $resultat = \Spring\Participant::findIcamGarantId($guest['id']); echo $resultat
 				       ?>" title="Editer l'utilisateur #<?php echo $guest['id']; ?>">Edit</a>
 				      <a href="liste_participants/supprimer/<?php echo $guest['id']; ?>" title="Supprimer l'utilisateur #<?php echo $guest['id']; ?>" onclick="return confirm('Voulez-vous vraiment supprimer cet invité et ses invités ?');">Sup</a>              
 				    </div>

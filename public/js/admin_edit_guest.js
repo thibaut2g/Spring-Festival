@@ -117,7 +117,7 @@
 		checkXhr(guestId);
 		xhr[guestId] = $.ajax({
 			type : "POST",
-			url : "verifier_invite",
+			url : "verifier_guest",
 			data : 'bracelet_id='+numero+'&id='+guestId,
 			success: function(server_response){
 				console.log(server_response);
@@ -162,17 +162,17 @@
 	 * Afficher ou cacher le formulaire pour un deuxième invité.
 	 */
 
-	var guests = $('.invite');
-	var invite1 = $('#invite1');
-	var invite2 = $('#invite2');
-	var invite3 = $('#invite3');
-	// var invite4 = $('#invite4');
-	// var invite5 = $('#invite5');
-	// var invite6 = $('#invite6');
-	// var invite7 = $('#invite7');
-	// var invite8 = $('#invite8');
-	// var invite9 = $('#invite9');
-	// var invite10 = $('#invite10');
+	var guests = $('.guest');
+	var guest1 = $('#guest1');
+	var guest2 = $('#guest2');
+	var guest3 = $('#guest3');
+	// var guest4 = $('#guest4');
+	// var guest5 = $('#guest5');
+	// var guest6 = $('#guest6');
+	// var guest7 = $('#guest7');
+	// var guest8 = $('#guest8');
+	// var guest9 = $('#guest9');
+	// var guest10 = $('#guest10');
 	function checkPromoGuestFields () {
 		// var promoVal = promo.val();
 		// guests.each(function(index, elem) {
@@ -181,10 +181,10 @@
 		// 		$(elem).hide();
 		// 	};
 		// });
-		// if (promoVal == 'Artiste Icam') {invite1.fadeIn();invite2.fadeIn();invite3.fadeIn();}
-		// else if (promoVal == '119') {invite1.fadeIn();invite2.fadeIn();invite3.fadeIn();/*invite4.fadeIn();invite5.fadeIn();invite6.fadeIn();invite7.fadeIn();invite8.fadeIn();invite9.fadeIn();invite10.fadeIn();*/}
-		// else if (promoVal == '118' || promoVal == 'Artiste Icam' || promoVal == '117') {invite1.fadeIn();invite2.fadeIn();}
-		// else{invite1.fadeIn();};
+		// if (promoVal == 'Artiste Icam') {guest1.fadeIn();guest2.fadeIn();guest3.fadeIn();}
+		// else if (promoVal == '119') {guest1.fadeIn();guest2.fadeIn();guest3.fadeIn();/*guest4.fadeIn();guest5.fadeIn();guest6.fadeIn();guest7.fadeIn();guest8.fadeIn();guest9.fadeIn();guest10.fadeIn();*/}
+		// else if (promoVal == '118' || promoVal == 'Artiste Icam' || promoVal == '117') {guest1.fadeIn();guest2.fadeIn();}
+		// else{guest1.fadeIn();};
 	}
 	checkPromoGuestFields ();
 	promo.change(function(event) {checkPromoGuestFields ();});
@@ -284,7 +284,7 @@
         source: function( request, response ) {
         	checkXhr('inputnom');
 			xhr['inputnom'] = $.ajax({
-                url: "resultat_invite",
+                url: "resultat_guest",
                 dataType: "json",
                 data: { nom: nom.val(), prenom: prenom.val() },
                 success: function( data ) { response( autocompleteSource(data) ); }
@@ -297,7 +297,7 @@
         source: function( request, response ) {
             checkXhr('inputprenom');
 			xhr['inputprenom'] = $.ajax({
-                url: "resultat_invite",
+                url: "resultat_guest",
                 dataType: "json",
                 data: { nom: nom.val(), prenom: prenom.val(), prenomFirst : 1},
                 success: function( data ) { response( autocompleteSource(data) ); }

@@ -48,7 +48,7 @@
             <li class="dropdown" id="admin">
 
                 <li><a href="<?= $RouteHelper->getPathFor('liste_participants') ?>"><i class="icon-book"></i> Liste des participants</a></li>
-                <li><a href="<?= $RouteHelper->getPathFor('ajout_invite') ?>"><i class="icon-plus"></i> Ajouter un invité</a></li>
+                <li><a href="<?= $RouteHelper->getPathFor('ajout_guest') ?>"><i class="icon-plus"></i> Ajouter un invité</a></li>
 
 
             </li>

@@ -75,10 +75,10 @@ INSERT INTO `configs` (`name`, `value`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `entrees` (
-  `invite_id` int(11) NOT NULL,
+  `guest_id` int(11) NOT NULL,
   `arrive` int(11) NOT NULL,
   `heure_arrive` datetime NOT NULL,
-  PRIMARY KEY (`invite_id`)
+  PRIMARY KEY (`guest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -121,15 +121,15 @@ INSERT INTO `guests` (`id`, `nom`, `prenom`, `is_icam`, `promo`, `email`, `telep
 
 CREATE TABLE IF NOT EXISTS `icam_has_guest` (
   `icam_id` int(11) NOT NULL,
-  `invite_id` int(11) NOT NULL,
-  PRIMARY KEY (`icam_id`,`invite_id`)
+  `guest_id` int(11) NOT NULL,
+  PRIMARY KEY (`icam_id`,`guest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `icam_has_guest`
 --
 
-INSERT INTO `icam_has_guest` (`icam_id`, `invite_id`) VALUES
+INSERT INTO `icam_has_guest` (`icam_id`, `guest_id`) VALUES
 (47, 48),
 (47, 49);
 

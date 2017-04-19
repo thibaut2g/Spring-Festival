@@ -21,7 +21,7 @@ class ProgressBars{
 	function __construct($id=-1,$attr=array()){
 		global $DB;
 		$this->totalguests = $DB->findCount('guests');
-		$this->totalguestsArrived    = $DB->findCount('entrees',array('arrive'=>1),'invite_id');
+		$this->totalguestsArrived    = $DB->findCount('entrees',array('arrive'=>1),'guest_id');
 		$this->totalguestsNotArrived = $this->totalguests - $this->totalguestsArrived;
 
 		$this->difference = current($DB->queryFirst('SELECT d.count-dd.count FROM (SELECT COUNT(*) count FROM guests  WHERE inscription >= CURDATE() AND inscription < CURDATE() + INTERVAL 1 DAY)d, (SELECT COUNT(*) count FROM guests  WHERE inscription >= CURDATE() - INTERVAL 1 DAY AND inscription < CURDATE())dd'));

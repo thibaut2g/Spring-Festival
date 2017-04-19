@@ -6,7 +6,7 @@
 
 <h1 class="page-header">
 <?php 
-if ($invite_id == -1) {
+if ($guest_id == -1) {
     echo "Ajouter un invité";
 }else{
     echo "Editer l'invité";
@@ -16,14 +16,14 @@ if ($invite_id == -1) {
     
 </h1>
 
-<form action="<?= $invite_id ?>" method="post" class="form-horizontal">
+<form action="<?= $guest_id ?>" method="post" class="form-horizontal">
 
     <fieldset>
         <legend>Icam / Permanent :</legend>
 
         <div class="row">
         	<div >
-        		<?php echo $form->input('id', 'hidden', array('value'=>$invite_id)); ?>
+        		<?php echo $form->input('id', 'hidden', array('value'=>$guest_id)); ?>
         		<?php echo $form->input('is_icam', 'hidden', array('value'=>true)); ?>
         	    <?php if($Auth->isAdmin())
 			    	echo $form->input('inscription','Date d\'inscription : ', array('maxlength'=>"20",'class'=>'datetimepicker'));
@@ -62,4 +62,4 @@ if ($invite_id == -1) {
 
 </form>
 <!-- 
-<script src="js/ajout_invite.js"></script> -->
+<script src="js/ajout_guest.js"></script> -->

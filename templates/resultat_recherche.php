@@ -6,7 +6,7 @@
 
 <script>
   jQuery(function() {
-    $('.inviteCount').each(function(event) {
+    $('.guestCount').each(function(event) {
       $(this).html(<?php echo '"'.$Listguests->countSqlReturnedguests.'/'.$Listguests->countguests.'"' ?>);
     });
     $('.pagination').each(function(event) {

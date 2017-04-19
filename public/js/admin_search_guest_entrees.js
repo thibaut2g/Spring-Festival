@@ -44,7 +44,7 @@ function refreshGuestList() {
   checkXhr('guestId');
   xhr['guestId'] = jQuery.ajax({
     type : "POST",
-    url : "resultat_invite_soiree.php",
+    url : "resultat_guest_soiree.php",
     data : searchForm.serialize(),
     success: function(server_response){
       jQuery("#resultat").empty().html(server_response).show();

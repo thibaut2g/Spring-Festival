@@ -54,36 +54,36 @@ $app->get('/liste_participants', function ($request, $response, $args) {
 })->setName('liste_participants');
 
 
-$app->get('/ajout_invite/{invite_id}', function ($request, $response, $args) {
+$app->get('/ajout_guest/{guest_id}', function ($request, $response, $args) {
 
-    $invite_id=$request->getAttribute('invite_id');
+    $guest_id=$request->getAttribute('guest_id');
 
     global $Auth, $DB;
 
     $flash = $this->flash;
-    $RouteHelper = new \Spring\RouteHelper($this, $request, 'Invite');
+    $RouteHelper = new \Spring\RouteHelper($this, $request, 'guest');
     $RouteHelper->publicPath = '../public/';
     $form = new \Spring\Forms();
     $js_for_layout[] = 'admin_edit_guest.js';
 
 
-    if (isset($invite_id) && $invite_id != -1 && \Spring\Participant::isGuest($invite_id)) {
-        $Guest = new \Spring\Participant($invite_id);
+    if (isset($guest_id) && $guest_id != -1 && \Spring\Participant::isGuest($guest_id)) {
+        $Guest = new \Spring\Participant($guest_id);
 
-        if ($Guest->is_icam == 0) { // On redirige vers la page d'édition de l'icam qui invite
+        if ($Guest->is_icam == 0) { // On redirige vers la page d'édition de l'icam qui guest
 
             $Guest = null;
-            $Guest = new \Spring\Participant(Participant::findIcamGarantId($invite_id));
+            $Guest = new \Spring\Participant(Participant::findIcamGarantId($guest_id));
         }
 
         // Cas où on édite un User
-    }else if (isset($invite_id) && $invite_id != -1 && !\Spring\Participant::isGuest($invite_id)){
+    }else if (isset($guest_id) && $guest_id != -1 && !\Spring\Participant::isGuest($guest_id)){
 
         // Cas où l'id donnée ne corresponds à aucun utilisateur
         $this->flash->addMessage('danger', "<strong>Erreur :</strong> Cet id ne correspond à aucun invité");
         return $response->withStatus(303)->withHeader('Location', $this->router->pathFor('liste_participants'));
 
-    }else if ((isset($invite_id) && $invite_id == -1)){
+    }else if ((isset($guest_id) && $guest_id == -1)){
 
         $Guest = new \Spring\Participant();
         // Cas de l'ajout d'un nouvel utilisateur
@@ -92,23 +92,23 @@ $app->get('/ajout_invite/{invite_id}', function ($request, $response, $args) {
     }else{
         
         $this->renderer->render($response, 'header.php', compact('flash', 'RouteHelper', 'Auth', $args));
-        $this->renderer->render($response, 'ajout_invite.php', compact('RouteHelper', 'Auth', 'form', 'Guest', 'invite_id', $args));
+        $this->renderer->render($response, 'ajout_guest.php', compact('RouteHelper', 'Auth', 'form', 'Guest', 'guest_id', $args));
         return $this->renderer->render($response, 'footer.php', compact('RouteHelper', 'Auth', 'js_for_layout', $args));
 
     }
     
     $this->renderer->render($response, 'header.php', compact('flash', 'RouteHelper', 'Auth', $args));
-    $this->renderer->render($response, 'ajout_invite.php', compact('RouteHelper', 'Auth', 'form', 'Guest', 'invite_id', $args));
+    $this->renderer->render($response, 'ajout_guest.php', compact('RouteHelper', 'Auth', 'form', 'Guest', 'guest_id', $args));
     return $this->renderer->render($response, 'footer.php', compact('RouteHelper', 'Auth', 'js_for_layout', $args));
 
-})->setName('ajout_invite');
+})->setName('ajout_guest');
 
 
-$app->post('/ajout_invite/{invite_id}', function ($request, $response, $args) {
+$app->post('/ajout_guest/{guest_id}', function ($request, $response, $args) {
     global $Auth, $DB;
 
     $flash = $this->flash;
-    $RouteHelper = new \Spring\RouteHelper($this, $request, 'Invite');
+    $RouteHelper = new \Spring\RouteHelper($this, $request, 'guest');
     $RouteHelper->publicPath = '../public/';
     $js_for_layout[] = 'admin_edit_guest.js';
 
@@ -128,7 +128,7 @@ $app->post('/ajout_invite/{invite_id}', function ($request, $response, $args) {
 
         $form->setValidates($validate);
 
-        $d = $Guest->checkForm($_POST); // $_POST for invite table : 'id','prenom','nom','email','repas','promo','telephone','is_icam'
+        $d = $Guest->checkForm($_POST); // $_POST for guest table : 'id','prenom','nom','email','repas','promo','telephone','is_icam'
         $form->set($d);
 
         if ($form->validates($d)) { // fin pré-traitement
@@ -148,7 +148,7 @@ $app->post('/ajout_invite/{invite_id}', function ($request, $response, $args) {
 
             }
 
-            $invite_id = $Guest->id;
+            $guest_id = $Guest->id;
 
             return $response->withStatus(302)->withHeader('Location', $this->router->pathFor('liste_participants'));
 
@@ -163,15 +163,15 @@ $app->post('/ajout_invite/{invite_id}', function ($request, $response, $args) {
 
 });
 
-$app->get('/liste_participants/supprimer/{invite}', function ($request, $response, $args) {
+$app->get('/liste_participants/supprimer/{guest}', function ($request, $response, $args) {
     global $Auth;
 
-    $invite = $request->getAttribute('invite');
-    \Spring\Participant::deleteGuest($invite);
+    $guest = $request->getAttribute('guest');
+    \Spring\Participant::deleteGuest($guest);
     $this->flash->addMessage('success', "Suppression réussie");
     return $response->withStatus(302)->withHeader('Location', $this->router->pathFor('liste_participants'));
 
-})->setName('supprimer_invite');
+})->setName('supprimer_guest');
 
 
 $app->get('/entrees', function ($request, $response, $args) {
@@ -213,7 +213,7 @@ $app->post('/resultat_recherche.php', function ($request, $response, $args) {
 })->setName('resultat_recherche.php');
 
 
-$app->post('/resultat_invite_soiree.php', function ($request, $response, $args) {
+$app->post('/resultat_guest_soiree.php', function ($request, $response, $args) {
     global $Auth, $DB;
 
     $dataForm = array();
@@ -229,8 +229,8 @@ $app->post('/resultat_invite_soiree.php', function ($request, $response, $args) 
     
     $Listeguests = new \Spring\ListeguestsEntrees($dataForm);
     
-    $this->renderer->render($response, 'resultat_invite_soiree.php', compact('Auth', 'Listeguests', $args));
-})->setName('resultat_invite_soiree.php');
+    $this->renderer->render($response, 'resultat_guest_soiree.php', compact('Auth', 'Listeguests', $args));
+})->setName('resultat_guest_soiree.php');
 
 
 $app->post('/soiree_validee.php', function ($request, $response, $args) {
@@ -241,14 +241,14 @@ $app->post('/soiree_validee.php', function ($request, $response, $args) {
 })->setName('soiree_validee.php');
 
 
-$app->get('/ajout_invite', function ($request, $response, $args) {
+$app->get('/ajout_guest', function ($request, $response, $args) {
 
-    header("Location:ajout_invite/-1");exit;
+    header("Location:ajout_guest/-1");exit;
 
 })->setName('erreur_ajout');
 
 
-// $app->post('/resultat_invite', function ($request, $response, $args) {
+// $app->post('/resultat_guest', function ($request, $response, $args) {
 //     global $Auth;
 //     $dataForm = array();
 
@@ -257,14 +257,14 @@ $app->get('/ajout_invite', function ($request, $response, $args) {
 //     else
 //         $dataForm = $_POST;
 //     $ListGuests = new ListGuests($dataForm);
-//     $this->renderer->render($response, 'resultat_invite.php', compact('Auth', 'ListGuests', $args));
+//     $this->renderer->render($response, 'resultat_guest.php', compact('Auth', 'ListGuests', $args));
 
-// })->setName('resultat_invite');
+// })->setName('resultat_guest');
 
 
-// $app->post('/verifier_invite', function ($request, $response, $args) {
+// $app->post('/verifier_guest', function ($request, $response, $args) {
 //     global $Auth, $DB;
     
-//     $this->renderer->render($response, 'verifier_invite.php', compact('Auth', 'DB', $args));
+//     $this->renderer->render($response, 'verifier_guest.php', compact('Auth', 'DB', $args));
 
-// })->setName('verifier_invite');
+// })->setName('verifier_guest');
