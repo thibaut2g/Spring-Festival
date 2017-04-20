@@ -61,7 +61,7 @@ $app->get('/ajout_guest/{guest_id}', function ($request, $response, $args) {
     global $Auth, $DB;
 
     $flash = $this->flash;
-    $RouteHelper = new \Spring\RouteHelper($this, $request, 'guest');
+    $RouteHelper = new \Spring\RouteHelper($this, $request, 'Invite');
     $RouteHelper->publicPath = '../public/';
     $form = new \Spring\Forms();
     $js_for_layout[] = 'admin_edit_guest.js';

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Spring Festival - Connexion">
     <meta name="author" content="Antoine Giraud">
-    <link rel="shortcut icon" href="<?= $RouteHelper->publicPath ?>/img/favicon.png">
+    <link rel="shortcut icon" href="<?= $RouteHelper->publicPath ?>/img/Art.ico">
 
     <!-- Le styles -->
     <link href="<?= $RouteHelper->publicPath ?>css/bootstrap.min.css" rel="stylesheet">

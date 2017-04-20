@@ -10,7 +10,7 @@
     <link href="<?= $RouteHelper->publicPath ?>css/main.css" rel="stylesheet">
     <meta name="description" content="Site internet du Spring pour les inscriptions">
     <meta name="author" content="Thibaut de Gouberville 118, Guillaume Dubois 119, Antoine Giraud 115">
-    <link rel="shortcut icon" href="<?= $RouteHelper->publicPath ?>img/art.ico">
+    <link rel="shortcut icon" href="<?= $RouteHelper->publicPath ?>img/Art.ico">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
