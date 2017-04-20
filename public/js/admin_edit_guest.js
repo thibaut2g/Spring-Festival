@@ -127,7 +127,6 @@
 			  	}else{
 			  		bracelet_idInput.parent().parent().addClass('error');
 					bracelet_idInput.next().remove();
-					bracelet_idInput.parent().append('<span class="help-inline">Numero déjà pris</span>');
 			  	};
 			  	$('.loader').fadeOut(500,function(event){$(this).remove();});
 			}
