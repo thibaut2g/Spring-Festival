@@ -63,7 +63,7 @@ public static $prixParPromo = array(
 				'prixIcam' => array("soiree" => 15),
 				'prixguest' => array("soiree" => 15)),
 		'2018' => array('nbguests' => 2,
-				'prixIcam' => array("soiree" => NULL),
+				'prixIcam' => array("soiree" => 0),
 				'prixguest' => array("soiree" => 15)),
 		'2017' => array('nbguests' => 2,
 				'prixIcam' => array("soiree" => 15),
