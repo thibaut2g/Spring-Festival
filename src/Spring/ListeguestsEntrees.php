@@ -7,7 +7,7 @@ class ListeguestsEntrees extends Listeguests{
 	const perPages = 10;
 
 	function __construct($data=array()){
-		$data['options']['fields'] = array('id','bracelet_id','prenom','nom','promo','is_icam','paiement');
+		$data['options']['fields'] = array('id','bracelet_id','prenom','nom','promo','is_icam','paiement','inscription','arrived','price');
 		parent::__construct($data);
 		// debug($this->generalData(),'generalData');
 		// debug($this->guestsList,'guestsList');
@@ -47,7 +47,7 @@ class ListeguestsEntrees extends Listeguests{
 	public function getGuestAsTr(){
 		ob_start();
 
-		if($this->countGuests){
+		if($this->countguests){
 	        foreach ($this->guestsList as $guest) { ?>
 <tr class="<?php echo ($guest['is_icam']==1)?'':'warning' ?>">
   <td>
@@ -70,9 +70,9 @@ class ListeguestsEntrees extends Listeguests{
   <td>
     <div class="pull-right">
     	<?php if (!$guest['arrived']){ ?>
-			<a href="#" class="btn btn-success btn-mini arrivalMarkUp" title="Marquer l'invité comme arrivé au Gala" id="<?php echo $guest['id'] ?>"><i class="icon-ok"></i></a>
+			<a href="#" class="btn btn-success btn-mini arrivalMarkUp" title="Marquer l'invité comme arrivé au Gala" id="<?php echo $guest['id'] ?>">V</a>
     	<?php }else{ ?>
-			<a href="#" class="btn btn-danger btn-mini arrivalMarkUp" title="Marquer l'invité comme NON arrivé au Gala" id="<?php echo $guest['id'] ?>"><i class="icon-remove"></i></a>
+			<a href="#" class="btn btn-danger btn-mini arrivalMarkUp" title="Marquer l'invité comme NON arrivé au Gala" id="<?php echo $guest['id'] ?>">X</a>
     	<?php } ?>
       <a href="#" rel="popover">
         <i class="icon-info-sign"></i>
@@ -154,4 +154,14 @@ class ListeguestsEntrees extends Listeguests{
 		ob_end_clean();
 		return $return;
 	}
+
+	public function getNbGuestArrived(){
+		global $DB;
+		$sql = 'SELECT COUNT(arrived) FROM entrees WHERE arrived = 1';
+		$nb = $DB->query($sql);
+		$res = array_pop($nb);
+		$rep = intval($res['COUNT(arrived)']);
+		return $rep;
+	}
+
 }

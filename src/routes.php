@@ -189,7 +189,7 @@ $app->get('/entrees', function ($request, $response, $args) {
 
     $this->renderer->render($response, 'header.php', compact('Auth', 'flash', 'RouteHelper', $args));
     $this->renderer->render($response, 'entrees.php', compact('Auth', 'Listeguests', 'RouteHelper', $args));
-    return $this->renderer->render($response, 'footer.php', compact('Auth', 'RouteHelper', $args));
+    return $this->renderer->render($response, 'footer.php', compact('Auth', 'RouteHelper', 'js_for_layout', $args));
 })->setName('entrees');
 
 
@@ -246,6 +246,15 @@ $app->get('/ajout_guest', function ($request, $response, $args) {
     header("Location:ajout_guest/-1");exit;
 
 })->setName('erreur_ajout');
+
+
+$app->post('/admin_guest_check.php', function ($request, $response, $args) {
+    global $Auth, $DB;
+    echo 'ok';die();
+    
+    $this->renderer->render($response, 'admin_guest_check.php', compact('Auth', 'DB', $args));
+
+})->setName('admin_guest_check.php');
 
 
 // $app->post('/resultat_guest', function ($request, $response, $args) {

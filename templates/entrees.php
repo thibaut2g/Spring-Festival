@@ -16,6 +16,9 @@
     </tbody>
 </table>
 </form>
+<br><hr>
+<h4>Nombre d'invités encore attendus : <b><?= $Listeguests->countguests - $Listeguests->getNbGuestArrived() ?></b> invités  <a href="entrees" class="btn btn-primary btn-large">Actualiser</a></h4>
+
 
 <hr>
 <p><small>

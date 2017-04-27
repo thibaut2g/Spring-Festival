@@ -5,7 +5,7 @@
 <script>
   jQuery(function() {
     $('.guestCount').each(function(event) {
-      $(this).html(<?php echo '"'.$ListGuests->countSqlReturnedGuests.'/'.$ListGuests->countGuests.'"' ?>);
+      $(this).html(<?php echo '"'.$Listeguests->countSqlReturnedguests.'/'.$Listeguests->countguests.'"' ?>);
     });
 
     $('.span_bracelet_id').click(function(event) {
